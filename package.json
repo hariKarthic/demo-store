@@ -110,6 +110,7 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-react-app": "^3.1.1",
     "babel-register": "^6.26.0",
-    "nodemon": "^1.17.1"
+    "nodemon": "^1.17.1",
+    "webpack-dev-middleware": "^2.0.6"
   }
 }

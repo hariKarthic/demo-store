@@ -19,12 +19,7 @@ const fetchWrappers = () => {
 const renderComponents = (wrapperNodes) => {
     wrapperNodes.forEach((element) => {
         const TagName = Components[element.dataset.component];
-        if (!window) {
-            renderToString("Wow")
-        } else {
-            ReactDOM.render(<TagName/>, element)
-
-        }
+        ReactDOM.render(<TagName/>, element)
     });
 };
 

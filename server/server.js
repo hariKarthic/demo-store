@@ -1,26 +1,40 @@
-
-const template = require('./template');
-const React = require('react');
+//stuff needed for express server
 const express = require('express');
 const bodyParser = require('body-parser');
-const cheerio = require('cheerio');
 const PORT = 3000;
-const app = express();
+
+
+//stuff needed for rendering
 import {renderToString} from 'react-dom/server';
+
+const cheerio = require('cheerio');
+const template = require('./template');
 import * as Components from "../src/components";
+
+//honestly ... why??
+const React = require('react');
+
+//webpack stuff
+const webpack = require('webpack');
+const webpackDevMiddleware = require('webpack-dev-middleware');
+
+const webpackConfig = require('../config/webpack.config.dev');
+const webpackCompiler = webpack(webpackConfig);
 
 //TODO: set up express.static();
 /* app.use(express.static(path.join('../public')))*/
-
+const app = express();
 app.set('port', process.env.PORT || PORT);
-
+app.use(webpackDevMiddleware(webpackCompiler, {
+    publicPath: webpackConfig.output.publicPath
+}));
 
 const fetchWrappers = ($) => {
     const wrapperNodes = $("[data-component]");
     return wrapperNodes;
 };
-const renderComponents = (wrapperNodes,$) =>{
-    wrapperNodes.map((index,element) =>{
+const renderComponents = (wrapperNodes, $) => {
+    wrapperNodes.map((index, element) => {
         const compName = $(element).data('component');
         const reactElement = React.createElement(Components[compName]);
         const htmlString = renderToString(reactElement)
@@ -33,8 +47,6 @@ const logger = (req, res, next) => {
     console.log("Requested " + req.path + " at " + ts);
     next();
 };
-
-
 
 app.use(logger);
 
@@ -49,13 +61,14 @@ app.get('/', (req, res) => {
     //  const headerString = ReactDOMServer.renderToString("Wow");
 
     //TODO: Make API call  to AEM to fetch template, template is hardcoded now.
+
+    //using cheerio to parse the HTML , as different react apps have to be added to different placeholders
     const $ = cheerio.load(template());
 
     const wrapperNodes = fetchWrappers($);
     if (wrapperNodes) {
-        renderComponents(wrapperNodes,$);
+        renderComponents(wrapperNodes, $);
     }
-
     // const reactElement = React.createElement(<Header/>)
     // const htmlString = renderToString(React.createElement(Header));
     //
