@@ -3,9 +3,6 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import * as Components from "./components"
 import registerServiceWorker from './registerServiceWorker';
-import {renderToString} from "react-dom/server";
-
-import cheerio from 'cheerio';
 
 /*pick a selector to mount the components onto*/
 
