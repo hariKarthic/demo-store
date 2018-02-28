@@ -21,11 +21,8 @@ const renderComponents = (wrapperNodes) => {
     wrapperNodes.forEach( (element ) => {
         const TagName = Components[element.dataset.component];
         ReactDOM.render(<TagName/>,element)
-    })
-
-
-
-}
+    });
+};
 
 const wrapperNodes = fetchWrappers();
 if(wrapperNodes){
