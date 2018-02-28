@@ -1,31 +1,22 @@
-const express = require('express');
-const bodyParser = require('body-parser');
 
-const PORT = 3000;
+process.env.BABEL_ENV = 'development';
+process.env.NODE_ENV = 'development';
 
-const app = express();
+require('ignore-styles');
+// require('babel-register')({
+//         "presets": [
+//             "env",
+//             "react"
+//         ],
+//         "plugins": [
+//             "transform-es2015-template-literals",
+//             "transform-es2015-spread",
+//             "transform-es2015-destructuring"
+//         ]
+//     }
+// );
 
-//TODO: set up express.static();
-/* app.use(express.static(path.join('../public')))*/
-
-app.set('port', process.env.PORT || PORT);
-
-const logger = (req,res,next) => {
-    let ts = Date.now();
-    console.log("Requested "+req.path+" at "+ts.toDateString());
-    next();
-};
-
-app.use(logger);
-
-app.listen(app.get('port'), () => {
-    console.log("Dev server started on PORT", app.get('port'));
+require('babel-register')({
+    presets:['react-app']
 });
-
-
-app.get('*', (req, res) => {
-    res.send("Hello there... Mindy!!!");
-})
-
-
-
+require('./server.js');
